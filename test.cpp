@@ -3,6 +3,15 @@
 #include <forward_list>
 using namespace std;
 
+template<typename T>
+struct t1
+{
+    T t;
+    t1() { t = T(); }
+    t1 (int i) { t = T(); }
+    void print() { cout << t << endl; }
+};
+
 struct test
 {
     fstream f;
@@ -82,5 +91,7 @@ int main()
     t.swap_neighbours(16, 0);
     cout << "ASDA" << endl;
     t.print(32); */
+    t1<char*> r(10);
+    r.print();
     return 0;
 }

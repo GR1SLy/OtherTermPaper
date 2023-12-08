@@ -325,16 +325,15 @@ inline void binary_list<char*>::swap_neighbours_if_less(int prevpos)
     char* val2;
     f.seekg(prevpos_next + sizeof(int));
     f.read((char*)&len1, sizeof(int));
-    f.read((char*)&len2, sizeof(int));
     val1 = new char[len1 + 1];
-    val2 = new char[len2 + 1];
     f.read(val1, len1);
-    f.seekg(curpos_next + sizeof(int));
-    f.read(val2, len2);
     val1[len1] = '\0';
+    f.seekg(curpos_next + sizeof(int));
+    f.read((char*)&len2, sizeof(int));
+    val2 = new char[len2 + 1];
+    f.read(val2, len2);
     val2[len2] = '\0';
-    cout << "1: " << val1 << "2: " << val2 << endl;
-    if (val1 >= val2)
+    if (val1[0] >= val2[0])
     {
         // начинаем свапать элементы
         f.seekp(prevpos);
@@ -370,12 +369,13 @@ inline void binary_list<T>::sort()
 template<>
 inline void binary_list<char*>::sort()
 {
-    this->push_front("AAAA");
+    char* add = new char[4] {'A', 'A', 'A', '\0'};
+    this->push_front(add);
     int next = head;
-    for (int i = 0; i < size - 4; i++)
+    for (int i = 0; i < size - 2; i++)
     {
         next = head;
-        for (int j = 0; j < size - 4; j++)
+        for (int j = 0; j < size - 2; j++)
         {
             f.seekg(next);
             this->swap_neighbours_if_less(next);
@@ -384,6 +384,7 @@ inline void binary_list<char*>::sort()
         }
     }
     this->pop_front();
+    delete[] add;
 }
 
 

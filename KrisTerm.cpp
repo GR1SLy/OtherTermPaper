@@ -139,7 +139,7 @@ struct blist
         size--;
     }
 
-    int operator[](int index)
+    /* int operator[](int index)
     {
         if (index >= size || index < 0) return -1; //need exception
         //find element at index (insert to next)
@@ -157,7 +157,7 @@ struct blist
         f.seekg(next + sizeof(int));
         f.read((char*)&value, sizeof(int));
         return value;
-    }
+    } */
 
     bool empty()
     {
@@ -191,7 +191,7 @@ struct blist
         f.read((char*)&val1, sizeof(int));
         f.seekg(curpos_next + sizeof(int));
         f.read((char*)&val2, sizeof(int));
-        if (val1 > val2)
+        if (val1 >= val2)
         {
             // начинаем свапать элементы
             f.seekp(prevpos);
@@ -236,7 +236,7 @@ int main()
     b.push_front(5);
     // b.erase_after(3);
     b.print();
-    cout << "b[4] = " << b[4] << "; Empty: " << b.empty() << endl;
+    cout << "; Empty: " << b.empty() << endl;
     b.sort();
     cout << "Front: " << b.front() << "; Size = " << b.get_size() << "; Head = " << b.head << endl;
     b.print();

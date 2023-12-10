@@ -11,7 +11,7 @@ checkfile - int
 
  */
 
-#include "binary_list.cpp"
+#include "binary_list.h"
 #include <iostream>
 #include <chrono>
 using namespace std;

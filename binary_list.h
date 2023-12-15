@@ -202,7 +202,7 @@ inline void binary_list<char*>::print()
 template <typename T>
 inline void binary_list<T>::insert_after(int index, const T value)
 {
-    if (index >= size || index < 0) throw list_ex("Can not insert_after. Index out of bounds");
+    if (index >= size - 1 || index < 0) throw list_ex("Can not insert_after. Index out of bounds");
     //find element at index (insert to next)
     f.seekg(head);
     int next;
@@ -229,7 +229,7 @@ inline void binary_list<T>::insert_after(int index, const T value)
 template<>
 inline void binary_list<char*>::insert_after(int index, char* value)
 {
-    if (index >= size || index < 0) throw list_ex("Can not insert_after. Index out of bounds");
+    if (index >= size - 1 || index < 0) throw list_ex("Can not insert_after. Index out of bounds");
     //find element at index (insert to next)
     f.seekg(head);
     int next;
@@ -258,7 +258,7 @@ inline void binary_list<char*>::insert_after(int index, char* value)
 template <typename T>
 inline void binary_list<T>::erase_after(int index)
 {
-    if (index >= size || index < 0) throw list_ex("Can not erase_after. Index out of bounds");
+    if (index >= size - 1 || index < 0) throw list_ex("Can not erase_after. Index out of bounds");
     //find element at index (insert to next)
     f.seekg(head);
     int next;

@@ -332,8 +332,6 @@ inline void binary_list<T>::swap_neighbours_if_less(int prevpos)
     int curpos_next;
     f.read((char*)&curpos_next, sizeof(int)); //curpos.next = nextpos
     f.seekg(curpos_next);
-    int nextpos_next;
-    f.read((char*)&nextpos_next, sizeof(int)); //nextpos.next = morepos
     T val1, val2;
     f.seekg(prevpos_next + sizeof(int));
     f.read((char*)&val1, sizeof(T));
@@ -341,6 +339,10 @@ inline void binary_list<T>::swap_neighbours_if_less(int prevpos)
     f.read((char*)&val2, sizeof(T));
     if (val1 >= val2)
     {
+        // забираем последний четвертый элемент
+        f.seekg(curpos_next);
+        int nextpos_next;
+        f.read((char*)&nextpos_next, sizeof(int)); //nextpos.next = morepos
         // начинаем свапать элементы
         f.seekp(prevpos);
         f.write((char*)&curpos_next, sizeof(int));
@@ -362,8 +364,6 @@ inline void binary_list<char*>::swap_neighbours_if_less(int prevpos)
     int curpos_next;
     f.read((char*)&curpos_next, sizeof(int)); //curpos.next = nextpos
     f.seekg(curpos_next);
-    int nextpos_next;
-    f.read((char*)&nextpos_next, sizeof(int)); //nextpos.next = morepos
     int len1, len2;
     char* val1;
     char* val2;
@@ -379,6 +379,10 @@ inline void binary_list<char*>::swap_neighbours_if_less(int prevpos)
     val2[len2] = '\0';
     if (val1[0] >= val2[0])
     {
+        // забираем последний четвертый элемент
+        f.seekg(curpos_next);
+        int nextpos_next;
+        f.read((char*)&nextpos_next, sizeof(int)); //nextpos.next = morepos
         // начинаем свапать элементы
         f.seekp(prevpos);
         f.write((char*)&curpos_next, sizeof(int));
@@ -395,7 +399,7 @@ template <typename T>
 inline void binary_list<T>::sort()
 {
     this->push_front(T());
-    int next = head;
+    int next;
     for (int i = 0; i < size - 2; i++)
     {
         next = head;
@@ -415,7 +419,7 @@ inline void binary_list<char*>::sort()
 {
     char* add = new char[4] {'A', 'A', 'A', '\0'};
     this->push_front(add);
-    int next = head;
+    int next;
     for (int i = 0; i < size - 2; i++)
     {
         next = head;

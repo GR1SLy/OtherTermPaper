@@ -52,7 +52,7 @@ void first_menu()
 }
 
 int main()
-{
+{ 
     first_menu();
     return 0;
 }
@@ -177,7 +177,7 @@ void insert_test()
     cout << "Текущий список:" << endl;
     b.print();
     cout << "Вставка элемента Z после второго элемента: " << endl;
-    b.insert_after(1, 'Z');
+    b.insert_after(2, 'Z');
     b.print();
     return test_menu();
 }

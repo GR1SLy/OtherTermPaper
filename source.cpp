@@ -32,18 +32,7 @@ void bigdata_test();
 
 int main()
 { 
-    // first_menu();
-    binary_list<Rectangle> br("test.bin");
-    Rectangle r1(10, 7, "Red");
-    br.push_front(r1);
-    br.push_front(r1);
-    br.push_front(r1);
-    Rectangle r2(13, 85, "Blue");
-    br.push_front(r2);
-    Rectangle r3(1, 3, "Grey");
-    br.insert_after(2, r3);
-    br.sort(); 
-    br.print();
+    first_menu();
     return 0;
 }
 
@@ -118,8 +107,44 @@ void test_menu()
 }
 
 void test_menu_hard()
-{
-    cout << "Тесты со сдожными типами данных еще не готовы" << endl;
+{   
+    system("clear");
+    binary_list<Rectangle> br("test.bin");
+    Rectangle r1(10, 7, "Red");
+    Rectangle r2(13, 85, "Blue");
+    Rectangle r3(1, 3, "Grey");
+    Rectangle r4(3, 50, "Black");
+    Rectangle r5(17, 9, "Yellow");
+    br.push_front(r1);
+    cout << "................" << endl;
+    cout << "Current list:" << endl;
+    cout << "................" << endl << endl;
+    br.print();
+    cout << "................" << endl;
+    cout << "Pushing to list:" << endl;
+    cout << "................" << endl << endl;
+    br.push_front(r2);
+    br.print();
+    cout << "................" << endl;
+    cout << "Current list:" << endl;
+    cout << "................" << endl << endl;
+    br.push_front(r4);
+    br.push_front(r3);
+    br.print();
+    cout << "................" << endl;
+    cout << "Inserting after fisrt element:" << endl;
+    cout << "................" << endl << endl;
+    br.insert_after(1, r5);
+    br.print();
+    cout << "................" << endl;
+    cout << "Current list:" << endl;
+    cout << "................" << endl << endl;
+    br.print();
+    cout << "................" << endl;
+    cout << "Sorting:" << endl;
+    cout << "................" << endl << endl;;
+    br.sort(); 
+    br.print();
     return first_menu();
 }
 

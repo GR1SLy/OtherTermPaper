@@ -12,11 +12,15 @@ checkfile - int
  */
 
 #include "binary_list.h"
+#include "Rectangle.cpp"
 #include <iostream>
 #include <chrono>
 using namespace std;
 using namespace std::chrono;
 
+void first_menu();
+void test_menu();
+void test_menu_hard();
 void push_test();
 void pop_test();
 void sort_test();
@@ -24,8 +28,24 @@ void insert_test();
 void erase_test();
 void checkfile_test();
 void bigdata_test();
-void test_menu();
-void test_menu_hard();
+
+
+int main()
+{ 
+    // first_menu();
+    binary_list<Rectangle> br("test.bin");
+    Rectangle r1(10, 7, "Red");
+    br.push_front(r1);
+    br.push_front(r1);
+    br.push_front(r1);
+    Rectangle r2(13, 85, "Blue");
+    br.push_front(r2);
+    Rectangle r3(1, 3, "Grey");
+    br.insert_after(2, r3);
+    br.sort(); 
+    br.print();
+    return 0;
+}
 
 void first_menu()
 {
@@ -49,12 +69,6 @@ void first_menu()
         default:
             return;
     }
-}
-
-int main()
-{ 
-    first_menu();
-    return 0;
 }
 
 void test_menu()

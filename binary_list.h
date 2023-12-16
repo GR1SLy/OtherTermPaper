@@ -2,6 +2,7 @@
 #define BINARY_LIST_H
 
 #include <iostream>
+#include "Rectangle.h"
 #include <fstream>
 using namespace std;
 #pragma once
@@ -147,6 +148,29 @@ inline void binary_list<char*>::push_front(char* value)
     size++;
 }
 
+template<>
+inline void binary_list<Rectangle>::push_front(Rectangle value)
+{
+    if (head == -1)
+    {
+        head = eof;
+        f.seekp(eof);
+        int next = -1;
+        f.write((char*)&next, sizeof(int));
+        f << value;
+        eof += sizeof(int) + value.get_size();
+    }
+    else
+    {
+        f.seekp(eof);
+        f.write((char*)&head, sizeof(int));
+        f << value;
+        head = eof;
+        eof += sizeof(int) + value.get_size();
+    }
+    size++;
+}
+
 template <typename T>
 inline void binary_list<T>::pop_front()
 {
@@ -194,6 +218,26 @@ inline void binary_list<char*>::print()
         value[len] = '\0';
         cout << i++ << ": " << value << endl;
         delete[] value;
+        if (next == -1) break;
+        f.seekg(next);
+    }
+}
+
+template <>
+inline void binary_list<Rectangle>::print()
+{
+    if (head == -1) return;
+    f.seekg(head);
+    int next;
+    Rectangle value;
+    int i = 0;
+    while (true)
+    {
+        f.read((char*)&next, sizeof(int));
+        f >> value;
+        cout << i++ << ": ";
+        value.print();
+        cout << endl;
         if (next == -1) break;
         f.seekg(next);
     }
@@ -255,6 +299,33 @@ inline void binary_list<char*>::insert_after(int index, char* value)
     eof += sizeof(int) * 2 + len;
 }
 
+template <>
+inline void binary_list<Rectangle>::insert_after(int index, Rectangle value)
+{
+    if (index >= size - 1 || index < 0) throw list_ex("Can not insert_after. Index out of bounds");
+    //find element at index (insert to next)
+    f.seekg(head);
+    int next;
+    f.read((char*)&next, sizeof(int));
+    f.seekg(next);
+    for (int i = 0; i < index - 1; i++)
+    {
+        f.read((char*)&next, sizeof(int));
+        f.seekg(next);
+    }
+    //next - element at index
+    int tempnext; //next element
+    f.read((char*)&tempnext, sizeof(int));
+    f.seekp(eof); //jump to end of file
+    f.write((char*)&tempnext, sizeof(int)); //creating new node
+    f << value;
+    f.seekp(next); //comeback to element at index
+    next = eof;
+    f.write((char*)&next, sizeof(int)); //put next to new element in the end
+    size++;
+    eof += sizeof(int) + value.get_size();
+}
+
 template <typename T>
 inline void binary_list<T>::erase_after(int index)
 {
@@ -311,6 +382,19 @@ inline char* binary_list<char*>::front()
         value = new char[len + 1];
         f.read(value, len);
         value[len] = '\0';
+        return value;
+    }
+}
+
+template <>
+inline Rectangle binary_list<Rectangle>::front()
+{
+    if (head == -1) throw list_ex("List is empty");
+    else 
+    {
+        f.seekg(head + sizeof(int));
+        Rectangle value;
+        f >> value;
         return value;
     }
 }
@@ -393,6 +477,38 @@ inline void binary_list<char*>::swap_neighbours_if_less(int prevpos)
     }
     delete[] val1;
     delete[] val2;
+}
+
+template <>
+inline void binary_list<Rectangle>::swap_neighbours_if_less(int prevpos)
+{
+    // сохраняем позиции четырех элементов
+    f.seekg(prevpos);
+    int prevpos_next;
+    f.read((char*)&prevpos_next, sizeof(int)); //prevpos.next = curpos
+    f.seekg(prevpos_next);
+    int curpos_next;
+    f.read((char*)&curpos_next, sizeof(int)); //curpos.next = nextpos
+    f.seekg(curpos_next);
+    Rectangle val1, val2;
+    f.seekg(prevpos_next + sizeof(int));
+    f >> val1;
+    f.seekg(curpos_next + sizeof(int));
+    f >> val2;
+    if (val1 >= val2)
+    {
+        // забираем последний четвертый элемент
+        f.seekg(curpos_next);
+        int nextpos_next;
+        f.read((char*)&nextpos_next, sizeof(int)); //nextpos.next = morepos
+        // начинаем свапать элементы
+        f.seekp(prevpos);
+        f.write((char*)&curpos_next, sizeof(int));
+        f.seekp(prevpos_next);
+        f.write((char*)&nextpos_next, sizeof(int));
+        f.seekp(curpos_next);
+        f.write((char*)&prevpos_next, sizeof(int));
+    }
 }
 
 template <typename T>
